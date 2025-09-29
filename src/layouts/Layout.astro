@@ -1,0 +1,76 @@
+---
+// Layout.astro - Estructura base de la aplicación
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "AlphaMen - Espectáculos de clase mundial" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content={description} />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Lobster&display=swap" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Meta tags para SEO -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="/src/styles/global.css" />
+</head>
+<body>
+  <main>
+    <slot />
+  </main>
+  
+  <!-- Script para animaciones scroll reveal -->
+  <script>
+    // Configuración del Intersection Observer para animaciones scroll reveal
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observar todos los elementos con clase scroll-reveal
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollElements = document.querySelectorAll('.scroll-reveal');
+      scrollElements.forEach(el => observer.observe(el));
+    });
+
+    // Smooth scroll para navegación interna
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[href^="#"]');
+      if (target) {
+        e.preventDefault();
+        const id = target.getAttribute('href').substring(1);
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+---
+// Services.astro - Sección de servicios de AlphaMen
+---
+
+<section id="services" class="section">
+    <div class="services-container">
+      <!-- Animaciones de fondo premium -->
+      <div class="services-animated-background">
+        <!-- Efectos de spotlight -->
+        <div class="spotlight-container">
+          <div class="spotlight"></div>
+          <div class="spotlight"></div>
+          <div class="spotlight"></div>
+        </div>
+        
+        <!-- Efectos de flash -->
+        <div class="flash-container">
+          <div class="flash-effect"></div>
+          <div class="flash-effect"></div>
+          <div class="flash-effect"></div>
+          <div class="flash-effect"></div>
+          <div class="flash-effect"></div>
+        </div>
+        
+        <!-- Grid de neón -->
+        <div class="neon-grid"></div>
+        
+        <!-- Partículas flotantes -->
+        <div class="particles-container">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+        
+        <!-- Overlay ambiental -->
+        <div class="ambient-overlay"></div>
+        
+        <!-- Líneas de escaneo -->
+        <div class="scan-lines"></div>
+      </div>
+      <!-- Header de la sección -->
+      <div class="services-header scroll-reveal">
+        <h2>Our Services</h2>
+        <p>
+          Discover our exclusive range of premium entertainment experiences, 
+          crafted to create unforgettable moments for any occasion.
+        </p>
+      </div>
+      
+      <!-- Grid de servicios -->
+      <div class="services-grid">
+        <!-- Bodyshot Service -->
+        <div class="service-card scroll-reveal" data-service="bodyshot">
+          <img 
+            src="/services/bodyshot.jpg" 
+            alt="Bodyshot Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">🥃</div>
+            <h3 class="service-title">Bodyshot</h3>
+            <p class="service-description">
+              An intimate and playful experience that adds excitement to any celebration
+            </p>
+          </div>
+        </div>
+        
+        <!-- Stage Stoplight Service -->
+        <div class="service-card scroll-reveal" data-service="stoplight">
+          <img 
+            src="/services/stage-stoplight.jpg" 
+            alt="Stage Stoplight Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">🚦</div>
+            <h3 class="service-title">Stage stoplight</h3>
+            <p class="service-description">
+              Interactive performance where the audience controls the show with lights
+            </p>
+          </div>
+        </div>
+        
+        <!-- Wheel of Fortune Service -->
+        <div class="service-card scroll-reveal" data-service="wheel">
+          <img 
+            src="/services/wheel-of-fortune.jpg" 
+            alt="Wheel of Fortune Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">🎰</div>
+            <h3 class="service-title">Wheel of fortune</h3>
+            <p class="service-description">
+              Spin the wheel for surprise performances and interactive entertainment
+            </p>
+          </div>
+        </div>
+        
+        <!-- Merch Service -->
+        <div class="service-card scroll-reveal" data-service="merch">
+          <img 
+            src="/services/merch.jpg" 
+            alt="Merchandise Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">👕</div>
+            <h3 class="service-title">Merch</h3>
+            <p class="service-description">
+              Exclusive AlphaMen merchandise and premium branded items
+            </p>
+          </div>
+        </div>
+        
+        <!-- Lap Dance Service -->
+        <div class="service-card scroll-reveal" data-service="lapdance">
+          <img 
+            src="/services/lap-dance.jpg" 
+            alt="Lap Dance Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">💃</div>
+            <h3 class="service-title">Lap dance</h3>
+            <p class="service-description">
+              Personal and sophisticated one-on-one entertainment experience
+            </p>
+          </div>
+        </div>
+        
+        <!-- Topless Waiter Service -->
+        <div class="service-card scroll-reveal" data-service="waiter">
+          <img 
+            src="/services/topless-waiter.jpg" 
+            alt="Topless Waiter Service"
+            class="service-image"
+            loading="lazy"
+          />
+          <div class="service-content">
+            <div class="service-icon">🍸</div>
+            <h3 class="service-title">Topless waiter</h3>
+            <p class="service-description">
+              Professional service staff providing elegant hospitality with flair
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Importar estilos específicos de services -->
+  <style>
+    @import url('/src/styles/services.css');
+    @import url('/src/styles/services-background-animation.css');
+  </style>
+  
+  <script>
+    // Variables para manejo de servicios
+    let currentHoveredCard: HTMLElement | null = null;
+    
+    // Función para inicializar efectos de las cards
+    function initServiceCards(): void {
+      const serviceCards = document.querySelectorAll('.service-card');
+      
+      serviceCards.forEach((card) => {
+        const htmlCard = card as HTMLElement;
+        
+        // Mouse enter - mostrar imagen
+        htmlCard.addEventListener('mouseenter', () => {
+          currentHoveredCard = htmlCard;
+          const image = htmlCard.querySelector('.service-image') as HTMLImageElement;
+          const content = htmlCard.querySelector('.service-content') as HTMLElement;
+          
+          if (image && content) {
+            // Efectos de hover
+            image.style.opacity = '1';
+            content.style.background = 'rgba(0, 0, 0, 0.6)';
+          }
+        });
+        
+        // Mouse leave - ocultar imagen
+        htmlCard.addEventListener('mouseleave', () => {
+          currentHoveredCard = null;
+          const image = htmlCard.querySelector('.service-image') as HTMLImageElement;
+          const content = htmlCard.querySelector('.service-content') as HTMLElement;
+          
+          if (image && content) {
+            // Resetear efectos
+            image.style.opacity = '0';
+            content.style.background = 'rgba(0, 0, 0, 0.8)';
+          }
+        });
+        
+        // Click para futuras interacciones (modal, navegación, etc.)
+        htmlCard.addEventListener('click', () => {
+          const serviceName = htmlCard.getAttribute('data-service');
+          console.log(`Service clicked: ${serviceName}`);
+          // Aquí puedes agregar lógica para mostrar más detalles del servicio
+        });
+      });
+    }
+    
+    // Función para animaciones de entrada con staggered effect
+    function initScrollAnimations(): void {
+      const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      };
+  
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            // Delay escalonado para cada card
+            setTimeout(() => {
+              entry.target.classList.add('animate-in');
+            }, index * 100);
+          }
+        });
+      }, observerOptions);
+  
+      // Observar cards de servicios
+      const serviceCards = document.querySelectorAll('.service-card');
+      serviceCards.forEach(card => observer.observe(card));
+    }
+    
+    // Función para optimizar imágenes lazy loading
+    function initLazyLoading(): void {
+      const images = document.querySelectorAll('.service-image');
+      
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target as HTMLImageElement;
+            
+            // Precargar imagen para hover más fluido
+            if (img.dataset.loaded !== 'true') {
+              const tempImage = new Image();
+              tempImage.onload = () => {
+                img.dataset.loaded = 'true';
+              };
+              tempImage.src = img.src;
+            }
+            
+            imageObserver.unobserve(img);
+          }
+        });
+      });
+      
+      images.forEach(img => imageObserver.observe(img));
+    }
+    
+    // Función para manejar redimensionamiento responsive
+    function handleResize(): void {
+      const serviceCards = document.querySelectorAll('.service-card');
+      const isMobile = window.innerWidth <= 768;
+      
+      serviceCards.forEach(card => {
+        const htmlCard = card as HTMLElement;
+        
+        if (isMobile) {
+          // En móvil, mostrar imagen siempre visible pero más sutil
+          const image = htmlCard.querySelector('.service-image') as HTMLImageElement;
+          if (image) {
+            image.style.opacity = '0.5';
+          }
+        } else {
+          // En desktop, solo mostrar en hover
+          const image = htmlCard.querySelector('.service-image') as HTMLImageElement;
+          if (image && htmlCard !== currentHoveredCard) {
+            image.style.opacity = '0';
+          }
+        }
+      });
+    }
+    
+    // Inicialización cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+      initServiceCards();
+      initScrollAnimations();
+      initLazyLoading();
+      
+      // Manejar redimensionamiento
+      window.addEventListener('resize', handleResize);
+      handleResize(); // Ejecutar una vez al cargar
+    });
+    
+    // Cleanup al salir de la página
+    window.addEventListener('beforeunload', () => {
+      window.removeEventListener('resize', handleResize);
+    });
+  </script>

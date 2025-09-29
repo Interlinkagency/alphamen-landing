@@ -1,0 +1,215 @@
+---
+// About.astro - Sección About con carrusel de imágenes
+---
+
+<section id="about" class="section section-dark">
+    <div class="about-container">
+      <!-- Carrusel de imágenes - Lado izquierdo -->
+      <div class="carousel-section scroll-reveal slide-left">
+        <div class="carousel-container">
+          <div class="carousel-wrapper">
+            <div class="carousel-track">
+              <div class="carousel-slide active">
+                <div class="image-card glassmorphism">
+                  <img src="/carousel-about/christmas.jpg" alt="AlphaMen Christmas Performance" loading="lazy">
+                  <div class="image-overlay">
+                    <div class="image-tag">Holiday Special</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="carousel-slide">
+                <div class="image-card glassmorphism">
+                  <img src="/carousel-about/swat1.jpg" alt="AlphaMen SWAT Performance" loading="lazy">
+                  <div class="image-overlay">
+                    <div class="image-tag">Action Theme</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="carousel-slide">
+                <div class="image-card glassmorphism">
+                  <img src="/carousel-about/swat2.jpg" alt="AlphaMen Elite Performance" loading="lazy">
+                  <div class="image-overlay">
+                    <div class="image-tag">Elite Show</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Controles del carrusel -->
+          <div class="carousel-controls">
+            <button class="carousel-btn prev-btn" type="button">
+              <span>❮</span>
+            </button>
+            <button class="carousel-btn next-btn" type="button">
+              <span>❯</span>
+            </button>
+          </div>
+          
+          <!-- Indicadores -->
+          <div class="carousel-indicators">
+            <button class="indicator active" type="button"></button>
+            <button class="indicator" type="button"></button>
+            <button class="indicator" type="button"></button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Contenido de texto - Lado derecho -->
+      <div class="content-section scroll-reveal slide-right delay-200">
+        <div class="content-wrapper">
+          <div class="section-header">
+            <div class="animated-gradient-text">
+              <div class="gradient-overlay"></div>
+              <h2 class="text-content">Who We Are</h2>
+            </div>
+            <div class="accent-line"></div>
+          </div>
+          
+          <div class="content-text">
+            <h3>The AlphaMen Experience</h3>
+            <p>
+              <strong>AlphaMen</strong> represents the pinnacle of male entertainment artistry. 
+              We are a collective of professional performers who deliver sophisticated, 
+              high-energy entertainment experiences.
+            </p>
+            
+            <p>
+              Built on principles of excellence, creativity, and respect, we have established 
+              ourselves as the premier choice for discerning clients who expect nothing less 
+              than extraordinary entertainment.
+            </p>
+            
+            <div class="tags-container">
+              <span class="tag">Professional</span>
+              <span class="tag">Premium Quality</span>
+              <span class="tag">Industry Leaders</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Importar estilos específicos del about -->
+  <style>
+    @import url('/src/styles/about.css');
+  </style>
+  
+  <script>
+    // Variables del carrusel con tipos explícitos
+    let currentSlide: number = 0;
+    const totalSlides: number = 3;
+    let autoPlayInterval: number | null = null;
+    
+    // Función para cambiar slide
+    function changeSlide(direction: number): void {
+      currentSlide += direction;
+      
+      if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+      } else if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+      }
+      
+      updateCarousel();
+    }
+    
+    // Función para ir a slide específico
+    function goToSlide(slideIndex: number): void {
+      currentSlide = slideIndex;
+      updateCarousel();
+    }
+    
+    // Función para actualizar el carrusel
+    function updateCarousel(): void {
+      const track = document.querySelector('.carousel-track') as HTMLElement;
+      const indicators = document.querySelectorAll('.indicator');
+      
+      // Verificar que el track existe antes de usarlo
+      if (track) {
+        // Mover el track
+        const translateX = -currentSlide * 33.333;
+        track.style.transform = `translateX(${translateX}%)`;
+      }
+      
+      // Actualizar indicadores
+      indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentSlide);
+      });
+    }
+    
+    // Auto-play del carrusel
+    function startAutoPlay(): void {
+      autoPlayInterval = window.setInterval(() => {
+        changeSlide(1);
+      }, 5000);
+    }
+    
+    function stopAutoPlay(): void {
+      if (autoPlayInterval !== null) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+      }
+    }
+    
+    // Inicializar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+      // Iniciar auto-play
+      startAutoPlay();
+      
+      // Pausar auto-play al hacer hover
+      const carouselContainer = document.querySelector('.carousel-container');
+      if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+        carouselContainer.addEventListener('mouseleave', startAutoPlay);
+      }
+      
+      // Event listeners para botones de control
+      const prevBtn = document.querySelector('.prev-btn');
+      const nextBtn = document.querySelector('.next-btn');
+      
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => changeSlide(-1));
+      }
+      
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => changeSlide(1));
+      }
+      
+      // Event listeners para indicadores
+      const indicators = document.querySelectorAll('.indicator');
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => goToSlide(index));
+      });
+      
+      // Soporte para swipe en móviles
+      let startX: number = 0;
+      let startY: number = 0;
+      
+      carouselContainer?.addEventListener('touchstart', (e) => {
+        const touchEvent = e as TouchEvent;
+        startX = touchEvent.touches[0].clientX;
+        startY = touchEvent.touches[0].clientY;
+      }, { passive: true });
+      
+      carouselContainer?.addEventListener('touchend', (e) => {
+        const touchEvent = e as TouchEvent;
+        const endX = touchEvent.changedTouches[0].clientX;
+        const endY = touchEvent.changedTouches[0].clientY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+        
+        // Solo si el swipe es más horizontal que vertical
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+          if (diffX > 0) {
+            changeSlide(1); // Swipe left - siguiente slide
+          } else {
+            changeSlide(-1); // Swipe right - slide anterior
+          }
+        }
+      }, { passive: true });
+    });
+  </script>
