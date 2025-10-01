@@ -1,0 +1,177 @@
+---
+// TaylorSection.astro - Sección del performer Taylor (Secret Agent Theme)
+---
+
+<section class="guy-section" id="taylor">
+  <!-- Background Flashes for Text Area -->
+  <div class="text-flashes-container">
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+    <div class="text-flash"></div>
+  </div>
+  
+  <div class="guy-content scroll-reveal">
+    <!-- Text Section (LEFT) -->
+    <div class="guy-text-container">
+      <div class="guy-header">
+        <h2 class="guy-name">Taylor</h2>
+        <h3 class="guy-role">agent</h3>
+      </div>
+      
+      <p class="guy-description">
+        Meet Taylor, our elite secret agent who brings sophistication and mystery 
+        to every performance. With his commanding presence and sharp style, he 
+        delivers an unforgettable experience that's both thrilling and refined. 
+        Whether it's a high-stakes mission or an intimate encounter, Taylor knows 
+        exactly how to keep you captivated.
+      </p>
+      
+      <!-- Tags -->
+      <div class="guy-tags">
+        <span class="guy-tag">5.8"</span>
+        <span class="guy-tag">Licensed to thrill</span>
+        <span class="guy-tag">Danger never looked so good</span>
+      </div>
+    </div>
+    
+    <!-- Diagonal Golden Line -->
+    <div class="diagonal-line"></div>
+    
+    <!-- Image Section (RIGHT) -->
+    <div class="guy-image-container">
+      <div class="image-wrapper">
+        <!-- Carousel Images (character, action, action2) -->
+        <img 
+          src="/guys/taylor/taylor-character.png" 
+          alt="Taylor - Secret Agent"
+          class="carousel-image active"
+          data-carousel="0"
+          loading="lazy"
+        />
+        <img 
+          src="/guys/taylor/taylor-action.png" 
+          alt="Taylor in Action"
+          class="carousel-image"
+          data-carousel="1"
+          loading="lazy"
+        />
+        <img 
+          src="/guys/taylor/taylor-action2.png" 
+          alt="Taylor Action Scene"
+          class="carousel-image"
+          data-carousel="2"
+          loading="lazy"
+        />
+        
+        <!-- Hover Image -->
+        <img 
+          src="/guys/taylor/taylor-hoover.png" 
+          alt="Taylor Special"
+          class="hover-image"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Importar estilos -->
+<style>
+  @import url('/src/styles/guys/taylor-section.css');
+</style>
+
+<script>
+  // Variables para el carrusel
+  let currentSlide: number = 0;
+  const totalSlides: number = 3;
+  let carouselInterval: number | null = null;
+  let isHovering: boolean = false;
+  
+  // Función para cambiar de imagen en el carrusel
+  function rotateCarousel(): void {
+    // No rotar si el usuario está haciendo hover
+    if (isHovering) return;
+    
+    const carouselImages = document.querySelectorAll('.carousel-image');
+    
+    // Remover clase active de todas las imágenes
+    carouselImages.forEach(img => img.classList.remove('active'));
+    
+    // Incrementar slide
+    currentSlide = (currentSlide + 1) % totalSlides;
+    
+    // Agregar clase active a la imagen actual
+    const currentImage = document.querySelector(`.carousel-image[data-carousel="${currentSlide}"]`);
+    if (currentImage) {
+      currentImage.classList.add('active');
+    }
+  }
+  
+  // Función para iniciar el carrusel automático
+  function startCarousel(): void {
+    carouselInterval = window.setInterval(rotateCarousel, 4000);
+  }
+  
+  // Función para pausar el carrusel
+  function pauseCarousel(): void {
+    if (carouselInterval !== null) {
+      clearInterval(carouselInterval);
+      carouselInterval = null;
+    }
+  }
+  
+  // Función para manejar el hover
+  function handleHover(): void {
+    const imageWrapper = document.querySelector('.image-wrapper');
+    
+    if (imageWrapper) {
+      imageWrapper.addEventListener('mouseenter', () => {
+        isHovering = true;
+        pauseCarousel();
+      });
+      
+      imageWrapper.addEventListener('mouseleave', () => {
+        isHovering = false;
+        startCarousel();
+      });
+    }
+  }
+  
+  // Inicialización
+  document.addEventListener('DOMContentLoaded', () => {
+    // Iniciar el carrusel automático
+    startCarousel();
+    
+    // Configurar hover handlers
+    handleHover();
+    
+    // Precargar imágenes para transiciones suaves
+    const carouselImages = document.querySelectorAll('.carousel-image, .hover-image');
+    carouselImages.forEach(img => {
+      const imgElement = img as HTMLImageElement;
+      if (imgElement.src) {
+        const preloadImg = new Image();
+        preloadImg.src = imgElement.src;
+      }
+    });
+  });
+  
+  // Limpiar el intervalo al salir de la página
+  window.addEventListener('beforeunload', () => {
+    pauseCarousel();
+  });
+  
+  // Pausar cuando la página no está visible (ahorro de recursos)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      pauseCarousel();
+    } else if (!isHovering) {
+      startCarousel();
+    }
+  });
+</script>

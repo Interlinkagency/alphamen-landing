@@ -1,0 +1,251 @@
+---
+// Navbar.astro - Componente de navegación principal
+---
+
+<nav class="navbar">
+    <!-- Partículas eléctricas decorativas -->
+    <div class="electric-particles">
+      <div class="electric-particle"></div>
+      <div class="electric-particle"></div>
+      <div class="electric-particle"></div>
+      <div class="electric-particle"></div>
+    </div>
+    
+    <div class="navbar-content">
+      <!-- Logo Section -->
+      <div class="navbar-logo">
+        <a href="/" class="logo-link">
+          <img 
+            src="/alphamen-logo.svg" 
+            alt="AlphaMen Logo" 
+            class="logo-svg"
+          />
+        </a>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="navbar-nav" id="navbarNav">
+        <a href="/guys" class="nav-link" data-nav="guys">
+          Guys
+        </a>
+        <a href="/#about" class="nav-link" data-nav="about">
+          Who We Are
+        </a>
+        <a href="/#services" class="nav-link" data-nav="services">
+          Services
+        </a>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="navbar-cta">
+        <button class="cta-button" id="contactButton">
+          Contact
+        </button>
+      </div>
+      
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+    </div>
+  </nav>
+  
+  <!-- Importar estilos del navbar -->
+  <style>
+    @import url('/src/styles/navbar.css');
+  </style>
+  
+  <script>
+    // Variables globales
+    let isMenuOpen = false;
+    let lastScrollY = 0;
+    
+    // Función para manejar el scroll
+    function handleScroll(): void {
+      const navbar = document.querySelector('.navbar');
+      const currentScrollY = window.scrollY;
+      
+      if (navbar) {
+        // Agregar clase 'scrolled' cuando se hace scroll
+        if (currentScrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }
+      
+      lastScrollY = currentScrollY;
+    }
+    
+    // Función para marcar el link activo según la sección visible
+    function updateActiveLink(): void {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      let currentSection = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.scrollY >= sectionTop - 100) {
+          currentSection = section.getAttribute('id') || '';
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        const navType = link.getAttribute('data-nav');
+        
+        if (navType === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    // Función para toggle del menú móvil
+    function toggleMobileMenu(): void {
+      const mobileToggle = document.getElementById('mobileMenuToggle');
+      const navbarNav = document.getElementById('navbarNav');
+      
+      if (mobileToggle && navbarNav) {
+        isMenuOpen = !isMenuOpen;
+        mobileToggle.classList.toggle('active');
+        navbarNav.classList.toggle('active');
+        
+        // Prevenir scroll del body cuando el menú está abierto
+        if (isMenuOpen) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      }
+    }
+    
+    // Función para cerrar menú móvil al hacer click en un link
+    function closeMobileMenu(): void {
+      const mobileToggle = document.getElementById('mobileMenuToggle');
+      const navbarNav = document.getElementById('navbarNav');
+      
+      if (mobileToggle && navbarNav && isMenuOpen) {
+        isMenuOpen = false;
+        mobileToggle.classList.remove('active');
+        navbarNav.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    
+    // Función para scroll suave a secciones
+    function smoothScrollToSection(e: Event): void {
+      e.preventDefault();
+      const target = e.currentTarget as HTMLAnchorElement;
+      const href = target.getAttribute('href');
+      
+      if (href && href.startsWith('/#')) {
+        const sectionId = href.substring(2);
+        const section = document.getElementById(sectionId);
+        
+        if (section) {
+          closeMobileMenu();
+          
+          // Offset para el navbar fijo
+          const navbarHeight = 150;
+          const targetPosition = section.offsetTop - navbarHeight;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+    
+    // Función para manejar el botón de contacto
+    function handleContactClick(): void {
+      // Aquí puedes agregar tu lógica de contacto
+      // Por ejemplo: abrir un modal, redirigir a una página, etc.
+      console.log('Contact button clicked');
+      
+      // Ejemplo: scroll a una sección de contacto si existe
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        const navbarHeight = 150;
+        const targetPosition = contactSection.offsetTop - navbarHeight;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // O mostrar un alert placeholder
+        alert('Contact form coming soon! For now, reach us at: info@alphamen.com');
+      }
+      
+      closeMobileMenu();
+    }
+    
+    // Inicialización cuando el DOM está listo
+    document.addEventListener('DOMContentLoaded', () => {
+      // Event listener para scroll
+      window.addEventListener('scroll', () => {
+        handleScroll();
+        updateActiveLink();
+      });
+      
+      // Event listener para toggle móvil
+      const mobileToggle = document.getElementById('mobileMenuToggle');
+      if (mobileToggle) {
+        mobileToggle.addEventListener('click', toggleMobileMenu);
+      }
+      
+      // Event listeners para los links de navegación
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        
+        // Solo agregar smooth scroll para links internos
+        if (href && href.startsWith('/#')) {
+          link.addEventListener('click', smoothScrollToSection);
+        }
+        
+        // Cerrar menú móvil al hacer click
+        link.addEventListener('click', () => {
+          setTimeout(closeMobileMenu, 300);
+        });
+      });
+      
+      // Event listener para el botón CTA
+      const contactButton = document.getElementById('contactButton');
+      if (contactButton) {
+        contactButton.addEventListener('click', handleContactClick);
+      }
+      
+      // Cerrar menú móvil al hacer click fuera de él
+      document.addEventListener('click', (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const navbar = document.querySelector('.navbar');
+        const mobileToggle = document.getElementById('mobileMenuToggle');
+        
+        if (isMenuOpen && navbar && !navbar.contains(target) && target !== mobileToggle) {
+          closeMobileMenu();
+        }
+      });
+      
+      // Ejecutar una vez al cargar
+      handleScroll();
+      updateActiveLink();
+    });
+    
+    // Cerrar menú móvil al cambiar el tamaño de la ventana
+    let resizeTimer: number;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (window.innerWidth > 768 && isMenuOpen) {
+          closeMobileMenu();
+        }
+      }, 250);
+    });
+  </script>

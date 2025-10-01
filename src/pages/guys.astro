@@ -1,0 +1,124 @@
+---
+// guys.astro - Página de performers de AlphaMen
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import TaylorSection from '../components/guys/TaylorSection.astro';
+import SanchezSection from '../components/guys/SanchezSection.astro';
+---
+
+<Layout 
+  title="AlphaMen - Our Performers" 
+  description="Meet the AlphaMen performers - professional artists delivering world-class entertainment experiences."
+>
+  <!-- Navbar -->
+  <Navbar />
+  
+  <!-- Container para secciones con efecto scroll blur -->
+  <div class="guys-container">
+    <!-- Taylor Section -->
+    <TaylorSection />
+    
+    <!-- Sanchez Section -->
+    <SanchezSection />
+  </div>
+</Layout>
+
+<!-- Importar estilos del efecto scroll blur -->
+<style>
+  @import url('/src/styles/guys/scroll-blur-effect.css');
+</style>
+
+<!-- Script para el efecto scroll blur tipo Apple -->
+<script>
+  let lastScrollY = 0;
+  let ticking = false;
+  
+  // Función para aplicar el efecto blur basado en scroll
+  function applyScrollBlurEffect(): void {
+    const sections = document.querySelectorAll('.guy-section');
+    const windowHeight = window.innerHeight;
+    const scrollY = window.scrollY;
+    
+    sections.forEach((section, index) => {
+      const htmlSection = section as HTMLElement;
+      const rect = htmlSection.getBoundingClientRect();
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      const sectionMiddle = sectionTop + (sectionHeight / 2);
+      
+      // Calcular el progreso del blur (0 a 1)
+      let blurProgress = 0;
+      
+      // Si la sección está entrando desde abajo
+      if (sectionTop > 0 && sectionTop < windowHeight) {
+        blurProgress = 1 - (sectionTop / windowHeight);
+      }
+      // Si la sección está saliendo por arriba
+      else if (sectionTop < 0 && sectionTop > -sectionHeight) {
+        blurProgress = 1 + (sectionTop / sectionHeight);
+      }
+      // Si la sección está completamente visible
+      else if (sectionTop <= 0 && sectionTop + sectionHeight >= windowHeight) {
+        blurProgress = 1;
+      }
+      
+      // Aplicar blur según el progreso
+      if (blurProgress >= 0.7) {
+        // Sección completamente visible
+        htmlSection.classList.remove('blur-out');
+        htmlSection.classList.add('blur-in');
+        htmlSection.style.filter = 'blur(0px)';
+        htmlSection.style.opacity = '1';
+        htmlSection.style.transform = 'scale(1)';
+      } else if (blurProgress > 0.3) {
+        // Transición
+        const blurAmount = (1 - blurProgress) * 15;
+        const opacityAmount = 0.5 + (blurProgress * 0.5);
+        const scaleAmount = 0.9 + (blurProgress * 0.1);
+        
+        htmlSection.style.filter = `blur(${blurAmount}px)`;
+        htmlSection.style.opacity = `${opacityAmount}`;
+        htmlSection.style.transform = `scale(${scaleAmount})`;
+      } else {
+        // Sección fuera de vista o muy borrosa
+        htmlSection.classList.add('blur-out');
+        htmlSection.classList.remove('blur-in');
+        htmlSection.style.filter = 'blur(15px)';
+        htmlSection.style.opacity = '0.3';
+        htmlSection.style.transform = 'scale(0.9)';
+      }
+    });
+    
+    lastScrollY = scrollY;
+  }
+  
+  // Usar requestAnimationFrame para mejor performance
+  function onScroll(): void {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        applyScrollBlurEffect();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    // Aplicar efecto inicial
+    applyScrollBlurEffect();
+    
+    // Escuchar eventos de scroll
+    window.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Aplicar también en resize
+    window.addEventListener('resize', () => {
+      applyScrollBlurEffect();
+    });
+  });
+  
+  // Cleanup
+  window.addEventListener('beforeunload', () => {
+    window.removeEventListener('scroll', onScroll);
+  });
+</script>

@@ -1,0 +1,85 @@
+/* scroll-blur-effect.css - Efecto de scroll blur tipo Apple */
+
+/* Container de secciones con scroll blur */
+.guys-container {
+    position: relative;
+  }
+  
+  /* Cada sección guy debe tener position sticky */
+  .guy-section {
+    position: sticky;
+    top: 0;
+    transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+    will-change: filter, opacity, transform;
+  }
+  
+  /* Clases para el efecto de scroll blur */
+  .guy-section.blur-out {
+    filter: blur(10px);
+    opacity: 0.3;
+    transform: scale(0.95);
+    pointer-events: none;
+  }
+  
+  .guy-section.blur-in {
+    filter: blur(0px);
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+  }
+  
+  /* Overlay para transiciones más suaves */
+  .section-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    transition: background 0.3s ease;
+    z-index: 10;
+  }
+  
+  .guy-section.blur-out .section-overlay {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent layout shift */
+  .guys-container {
+    min-height: 200vh;
+  }
+  
+  /* Performance optimizations */
+  @media (prefers-reduced-motion: reduce) {
+    .guy-section {
+      position: static;
+      filter: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    
+    .guy-section.blur-out {
+      filter: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    
+    .section-overlay {
+      display: none;
+    }
+  }
+  
+  /* Asegurar z-index correcto */
+  .guy-section#taylor {
+    z-index: 2;
+  }
+  
+  .guy-section#sanchez {
+    z-index: 1;
+  }
