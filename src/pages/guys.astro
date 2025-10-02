@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import TaylorSection from '../components/guys/TaylorSection.astro';
 import SanchezSection from '../components/guys/SanchezSection.astro';
+import JBSection from '../components/guys/JBSection.astro';
 ---
 
 <Layout 
@@ -13,112 +14,274 @@ import SanchezSection from '../components/guys/SanchezSection.astro';
   <!-- Navbar -->
   <Navbar />
   
-  <!-- Container para secciones con efecto scroll blur -->
+  <!-- Container para secciones con efecto scroll cinemático -->
   <div class="guys-container">
     <!-- Taylor Section -->
     <TaylorSection />
     
     <!-- Sanchez Section -->
     <SanchezSection />
+    
+    <!-- JB Section -->
+    <JBSection />
   </div>
 </Layout>
 
-<!-- Importar estilos del efecto scroll blur -->
+<!-- Importar estilos del efecto scroll -->
 <style>
   @import url('/src/styles/guys/scroll-blur-effect.css');
 </style>
 
-<!-- Script para el efecto scroll blur tipo Apple -->
+<!-- Script para el efecto scroll cinemático tipo Apple -->
 <script>
-  let lastScrollY = 0;
   let ticking = false;
-  
-  // Función para aplicar el efecto blur basado en scroll
-  function applyScrollBlurEffect(): void {
-    const sections = document.querySelectorAll('.guy-section');
-    const windowHeight = window.innerHeight;
+  let sections: NodeListOf<Element>;
+  let windowHeight: number;
+
+  // Función principal para calcular y aplicar el efecto scroll
+  function updateScrollEffect(): void {
     const scrollY = window.scrollY;
-    
-    sections.forEach((section, index) => {
+    windowHeight = window.innerHeight;
+
+    sections.forEach((section) => {
       const htmlSection = section as HTMLElement;
       const rect = htmlSection.getBoundingClientRect();
       const sectionTop = rect.top;
       const sectionHeight = rect.height;
-      const sectionMiddle = sectionTop + (sectionHeight / 2);
-      
-      // Calcular el progreso del blur (0 a 1)
-      let blurProgress = 0;
-      
-      // Si la sección está entrando desde abajo
-      if (sectionTop > 0 && sectionTop < windowHeight) {
-        blurProgress = 1 - (sectionTop / windowHeight);
+      const sectionBottom = sectionTop + sectionHeight;
+
+      // Calcular progreso de la sección en el viewport
+      let progress = 0;
+
+      if (sectionTop <= 0 && sectionBottom >= windowHeight) {
+        progress = 1;
+      } else if (sectionTop > 0 && sectionTop < windowHeight) {
+        progress = 1 - (sectionTop / windowHeight);
+      } else if (sectionBottom > 0 && sectionBottom < windowHeight) {
+        progress = sectionBottom / windowHeight;
       }
-      // Si la sección está saliendo por arriba
-      else if (sectionTop < 0 && sectionTop > -sectionHeight) {
-        blurProgress = 1 + (sectionTop / sectionHeight);
-      }
-      // Si la sección está completamente visible
-      else if (sectionTop <= 0 && sectionTop + sectionHeight >= windowHeight) {
-        blurProgress = 1;
-      }
-      
-      // Aplicar blur según el progreso
-      if (blurProgress >= 0.7) {
-        // Sección completamente visible
-        htmlSection.classList.remove('blur-out');
-        htmlSection.classList.add('blur-in');
-        htmlSection.style.filter = 'blur(0px)';
-        htmlSection.style.opacity = '1';
-        htmlSection.style.transform = 'scale(1)';
-      } else if (blurProgress > 0.3) {
-        // Transición
-        const blurAmount = (1 - blurProgress) * 15;
-        const opacityAmount = 0.5 + (blurProgress * 0.5);
-        const scaleAmount = 0.9 + (blurProgress * 0.1);
-        
-        htmlSection.style.filter = `blur(${blurAmount}px)`;
-        htmlSection.style.opacity = `${opacityAmount}`;
-        htmlSection.style.transform = `scale(${scaleAmount})`;
+
+      // Aplicar clases según el progreso
+      if (progress >= 0.7) {
+        htmlSection.classList.add('scrolling-in');
+        htmlSection.classList.remove('scrolling-out', 'inactive');
+      } else if (progress > 0.2 && progress < 0.7) {
+        htmlSection.classList.add('scrolling-out');
+        htmlSection.classList.remove('scrolling-in', 'inactive');
       } else {
-        // Sección fuera de vista o muy borrosa
-        htmlSection.classList.add('blur-out');
-        htmlSection.classList.remove('blur-in');
-        htmlSection.style.filter = 'blur(15px)';
-        htmlSection.style.opacity = '0.3';
-        htmlSection.style.transform = 'scale(0.9)';
+        htmlSection.classList.add('inactive');
+        htmlSection.classList.remove('scrolling-in', 'scrolling-out');
+      }
+
+      // Aplicar transformaciones progresivas
+      if (progress > 0 && progress < 1) {
+        const opacity = Math.max(0, Math.min(1, progress));
+        const scale = 0.8 + (progress * 0.2);
+        const blur = (1 - progress) * 25;
+        const brightness = 0.4 + (progress * 0.6);
+
+        htmlSection.style.opacity = `${opacity}`;
+        htmlSection.style.transform = `scale(${scale}) translateZ(${-300 * (1 - progress)}px)`;
+        htmlSection.style.filter = `blur(${blur}px) brightness(${brightness})`;
       }
     });
-    
-    lastScrollY = scrollY;
+
+    ticking = false;
   }
-  
-  // Usar requestAnimationFrame para mejor performance
+
+  // Usar requestAnimationFrame para optimizar performance
   function onScroll(): void {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        applyScrollBlurEffect();
-        ticking = false;
+        updateScrollEffect();
       });
       ticking = true;
     }
   }
-  
+
+  // Inicialización
+  function initCinematicScroll(): void {
+    sections = document.querySelectorAll('.guy-section');
+    windowHeight = window.innerHeight;
+
+    updateScrollEffect();
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    window.addEventListener('resize', () => {
+      windowHeight = window.innerHeight;
+      updateScrollEffect();
+    });
+  }
+
   // Inicializar cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', () => {
-    // Aplicar efecto inicial
-    applyScrollBlurEffect();
-    
-    // Escuchar eventos de scroll
-    window.addEventListener('scroll', onScroll, { passive: true });
-    
-    // Aplicar también en resize
-    window.addEventListener('resize', () => {
-      applyScrollBlurEffect();
-    });
+    setTimeout(() => {
+      initCinematicScroll();
+    }, 100);
   });
-  
+
   // Cleanup
   window.addEventListener('beforeunload', () => {
     window.removeEventListener('scroll', onScroll);
+  });
+</script>
+
+<!-- Script Universal de Carrusel -->
+<script>
+  // Sistema universal de carrusel para todas las secciones
+  class CarouselManager {
+    private section: string;
+    private currentSlide: number;
+    private totalSlides: number;
+    private interval: number | null;
+    private isHovering: boolean;
+    private images: HTMLElement[];
+
+    constructor(sectionSelector: string) {
+      this.section = sectionSelector;
+      this.currentSlide = 0;
+      this.totalSlides = 3;
+      this.interval = null;
+      this.isHovering = false;
+      this.images = [];
+    }
+
+    init(): boolean {
+      // Buscar imágenes del carrusel en esta sección
+      const nodeList = document.querySelectorAll(`${this.section} .carousel-image`);
+      this.images = Array.from(nodeList) as HTMLElement[];
+      
+      if (this.images.length === 0) {
+        console.warn(`No carousel images found for ${this.section}`);
+        return false;
+      }
+
+      // Asegurar que la primera imagen esté visible
+      if (this.images[0]) {
+        this.images[0].style.opacity = '1';
+        this.images[0].classList.add('active');
+      }
+
+      // Configurar hover
+      this.setupHover();
+
+      // Iniciar carrusel
+      this.start();
+
+      // Precargar imágenes
+      this.preloadImages();
+
+      return true;
+    }
+
+    private setupHover(): void {
+      const wrapper = document.querySelector(`${this.section} .image-wrapper`);
+      if (!wrapper) return;
+
+      wrapper.addEventListener('mouseenter', () => {
+        this.isHovering = true;
+        this.stop();
+      });
+
+      wrapper.addEventListener('mouseleave', () => {
+        this.isHovering = false;
+        this.start();
+      });
+    }
+
+    private rotate(): void {
+      if (this.isHovering || this.images.length === 0) return;
+
+      const currentImage = this.images[this.currentSlide];
+      
+      // Calcular siguiente slide
+      const nextSlide = (this.currentSlide + 1) % this.totalSlides;
+      const nextImage = this.images[nextSlide];
+
+      if (!nextImage) return;
+
+      // Fade out actual
+      if (currentImage) {
+        currentImage.style.opacity = '0';
+        currentImage.classList.remove('active');
+      }
+
+      // Fade in siguiente
+      nextImage.style.opacity = '1';
+      nextImage.classList.add('active');
+
+      // Actualizar índice
+      this.currentSlide = nextSlide;
+    }
+
+    start(): void {
+      this.stop(); // Limpiar cualquier intervalo anterior
+      this.interval = window.setInterval(() => this.rotate(), 4000);
+    }
+
+    stop(): void {
+      if (this.interval !== null) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+    }
+
+    private preloadImages(): void {
+      this.images.forEach(img => {
+        const htmlImg = img as HTMLImageElement;
+        const src = htmlImg.getAttribute('src');
+        if (src) {
+          const preload = new Image();
+          preload.src = src;
+        }
+      });
+
+      // Precargar hover image
+      const hoverImg = document.querySelector(`${this.section} .hover-image`) as HTMLImageElement;
+      if (hoverImg) {
+        const src = hoverImg.getAttribute('src');
+        if (src) {
+          const preload = new Image();
+          preload.src = src;
+        }
+      }
+    }
+  }
+
+  // Inicializar carruseles cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    // Pequeño delay para asegurar que todo esté renderizado
+    setTimeout(() => {
+      // Crear instancias para cada sección
+      const taylorCarousel = new CarouselManager('#taylor');
+      const sanchezCarousel = new CarouselManager('#sanchez');
+      const jbCarousel = new CarouselManager('#jb');
+
+      // Inicializar cada uno
+      taylorCarousel.init();
+      sanchezCarousel.init();
+      jbCarousel.init();
+
+      // Limpiar al salir
+      window.addEventListener('beforeunload', () => {
+        taylorCarousel.stop();
+        sanchezCarousel.stop();
+        jbCarousel.stop();
+      });
+
+      // Pausar cuando la página no está visible
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          taylorCarousel.stop();
+          sanchezCarousel.stop();
+          jbCarousel.stop();
+        } else {
+          if (!taylorCarousel['isHovering']) taylorCarousel.start();
+          if (!sanchezCarousel['isHovering']) sanchezCarousel.start();
+          if (!jbCarousel['isHovering']) jbCarousel.start();
+        }
+      });
+    }, 150);
   });
 </script>
