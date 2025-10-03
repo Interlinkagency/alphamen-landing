@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.astro';
 import TaylorSection from '../components/guys/TaylorSection.astro';
 import SanchezSection from '../components/guys/SanchezSection.astro';
 import JBSection from '../components/guys/JBSection.astro';
+import FinnSection from '../components/guys/FinnSection.astro'; 
 ---
 
 <Layout 
@@ -24,6 +25,9 @@ import JBSection from '../components/guys/JBSection.astro';
     
     <!-- JB Section -->
     <JBSection />
+
+    <!-- Finn Section -->
+    <FinnSection /> 
   </div>
 </Layout>
 
@@ -257,17 +261,20 @@ import JBSection from '../components/guys/JBSection.astro';
       const taylorCarousel = new CarouselManager('#taylor');
       const sanchezCarousel = new CarouselManager('#sanchez');
       const jbCarousel = new CarouselManager('#jb');
+      const finnCarousel = new CarouselManager('#finn'); 
 
       // Inicializar cada uno
       taylorCarousel.init();
       sanchezCarousel.init();
       jbCarousel.init();
+      finnCarousel.init();
 
       // Limpiar al salir
       window.addEventListener('beforeunload', () => {
         taylorCarousel.stop();
         sanchezCarousel.stop();
         jbCarousel.stop();
+        finnCarousel.stop();
       });
 
       // Pausar cuando la página no está visible
@@ -276,10 +283,12 @@ import JBSection from '../components/guys/JBSection.astro';
           taylorCarousel.stop();
           sanchezCarousel.stop();
           jbCarousel.stop();
+          finnCarousel.stop(); 
         } else {
           if (!taylorCarousel['isHovering']) taylorCarousel.start();
           if (!sanchezCarousel['isHovering']) sanchezCarousel.start();
           if (!jbCarousel['isHovering']) jbCarousel.start();
+          if (!finnCarousel['isHovering']) finnCarousel.start();
         }
       });
     }, 150);
