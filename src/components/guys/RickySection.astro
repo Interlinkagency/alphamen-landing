@@ -1,0 +1,89 @@
+---
+// RickySection.astro - Sección del performer Ricky (Firefighter Theme)
+---
+
+<section class="guy-section ricky" id="ricky">
+    <!-- Overlay para transición -->
+    <div class="section-overlay"></div>
+    
+    <!-- Background Flashes for Text Area -->
+    <div class="text-flashes-container">
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+    </div>
+    
+    <div class="guy-content scroll-reveal">
+      <!-- Text Section (LEFT) -->
+      <div class="guy-text-container">
+        <div class="guy-header">
+          <h2 class="guy-name">Ricky</h2>
+          <h3 class="guy-role">firefighter</h3>
+        </div>
+        
+        <p class="guy-description">
+          Meet Ricky, our heroic firefighter who brings sizzling heat and courage 
+          to every performance. With his commanding physique and brave presence, he 
+          delivers shows that ignite passion and leave audiences breathless. Whether 
+          it's a rescue-themed event or an evening of pure fire, Ricky knows how 
+          to turn up the heat and save the day.
+        </p>
+        
+        <!-- Tags -->
+        <div class="guy-tags">
+          <span class="guy-tag">6.1"</span>
+          <span class="guy-tag">Hot under pressure</span>
+          <span class="guy-tag">Rescue me</span>
+        </div>
+      </div>
+      
+      <!-- Diagonal Golden Line -->
+      <div class="diagonal-line"></div>
+      
+      <!-- Image Section (RIGHT) -->
+      <div class="guy-image-container">
+        <div class="image-wrapper">
+          <!-- Carousel Images (character, action, action2) -->
+          <img 
+            src="/guys/ricky/ricky-character.png" 
+            alt="Ricky - Firefighter"
+            class="carousel-image active"
+            data-carousel="0"
+            loading="lazy"
+          />
+          <img 
+            src="/guys/ricky/ricky-action.png" 
+            alt="Ricky in Action"
+            class="carousel-image"
+            data-carousel="1"
+            loading="lazy"
+          />
+          <img 
+            src="/guys/ricky/ricky-action2.png" 
+            alt="Ricky Action Scene"
+            class="carousel-image"
+            data-carousel="2"
+            loading="lazy"
+          />
+          
+          <!-- Hover Image -->
+          <img 
+            src="/guys/ricky/ricky-hoover.png" 
+            alt="Ricky Special"
+            class="hover-image"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Importar estilos -->
+  <style>
+    @import url('/src/styles/guys/ricky-section.css');
+  </style>

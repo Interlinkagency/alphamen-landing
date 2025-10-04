@@ -6,6 +6,9 @@ import TaylorSection from '../components/guys/TaylorSection.astro';
 import SanchezSection from '../components/guys/SanchezSection.astro';
 import JBSection from '../components/guys/JBSection.astro';
 import FinnSection from '../components/guys/FinnSection.astro'; 
+import RickySection from '../components/guys/RickySection.astro';
+import SammySection from '../components/guys/SammySection.astro'; 
+
 ---
 
 <Layout 
@@ -28,6 +31,12 @@ import FinnSection from '../components/guys/FinnSection.astro';
 
     <!-- Finn Section -->
     <FinnSection /> 
+
+    <!-- Ricky Section -->
+    <RickySection /> 
+
+    <!-- Sammy Section -->
+    <SammySection />
   </div>
 </Layout>
 
@@ -262,12 +271,16 @@ import FinnSection from '../components/guys/FinnSection.astro';
       const sanchezCarousel = new CarouselManager('#sanchez');
       const jbCarousel = new CarouselManager('#jb');
       const finnCarousel = new CarouselManager('#finn'); 
+      const rickyCarousel = new CarouselManager('#ricky');
+      const sammyCarousel = new CarouselManager('#sammy');
 
       // Inicializar cada uno
       taylorCarousel.init();
       sanchezCarousel.init();
       jbCarousel.init();
       finnCarousel.init();
+      rickyCarousel.init();
+      sammyCarousel.init();
 
       // Limpiar al salir
       window.addEventListener('beforeunload', () => {
@@ -275,6 +288,8 @@ import FinnSection from '../components/guys/FinnSection.astro';
         sanchezCarousel.stop();
         jbCarousel.stop();
         finnCarousel.stop();
+        rickyCarousel.stop();
+        sammyCarousel.stop(); 
       });
 
       // Pausar cuando la página no está visible
@@ -284,11 +299,15 @@ import FinnSection from '../components/guys/FinnSection.astro';
           sanchezCarousel.stop();
           jbCarousel.stop();
           finnCarousel.stop(); 
+          rickyCarousel.stop();
+          sammyCarousel.stop();
         } else {
           if (!taylorCarousel['isHovering']) taylorCarousel.start();
           if (!sanchezCarousel['isHovering']) sanchezCarousel.start();
           if (!jbCarousel['isHovering']) jbCarousel.start();
           if (!finnCarousel['isHovering']) finnCarousel.start();
+          if (!rickyCarousel['isHovering']) rickyCarousel.start();
+          if (!sammyCarousel['isHovering']) sammyCarousel.start();
         }
       });
     }, 150);
