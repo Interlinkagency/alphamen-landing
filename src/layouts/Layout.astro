@@ -1,5 +1,7 @@
 ---
 // Layout.astro - Estructura base de la aplicación
+import '../styles/global.css'; 
+
 export interface Props {
   title: string;
   description?: string;
@@ -30,7 +32,6 @@ const { title, description = "AlphaMen - Espectáculos de clase mundial" } = Ast
   <meta property="og:type" content="website" />
   
   <!-- Estilos globales -->
-  <link rel="stylesheet" href="/src/styles/global.css" />
 </head>
 <body>
   <main>

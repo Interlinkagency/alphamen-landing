@@ -88,6 +88,26 @@
   z-index: 3;
 }
 
+.guy-section#finn {
+  z-index: 4;
+}
+
+.guy-section#ricky {
+  z-index: 5;
+}
+
+.guy-section#sammy {
+  z-index: 6;
+}
+
+.guy-section#jt {
+  z-index: 7;
+}
+
+.guy-section#leon {
+  z-index: 8;
+}
+
 /* Efecto de parallax sutil en el contenido */
 .guy-section.scrolling-out .guy-content {
   transform: translateY(-30px);

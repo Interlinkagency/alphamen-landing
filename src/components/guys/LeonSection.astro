@@ -1,0 +1,86 @@
+---
+// LeonSection.astro - Sección del performer Leon (Anubis Theme)
+import '../../styles/guys/leon-section.css';
+
+---
+
+<section class="guy-section leon" id="leon">
+    <!-- Overlay para transición -->
+    <div class="section-overlay"></div>
+    
+    <!-- Background Flashes for Text Area -->
+    <div class="text-flashes-container">
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+      <div class="text-flash"></div>
+    </div>
+    
+    <div class="guy-content scroll-reveal">
+      <!-- Image Section (LEFT) -->
+      <div class="guy-image-container">
+        <div class="image-wrapper">
+          <!-- Carousel Images (character, action, action2) -->
+          <img 
+            src="/guys/leon/leon-character.png" 
+            alt="Leon - Anubis"
+            class="carousel-image active"
+            data-carousel="0"
+            loading="lazy"
+          />
+          <img 
+            src="/guys/leon/leon-action.png" 
+            alt="Leon in Action"
+            class="carousel-image"
+            data-carousel="1"
+            loading="lazy"
+          />
+          <img 
+            src="/guys/leon/leon-action2.png" 
+            alt="Leon Action Scene"
+            class="carousel-image"
+            data-carousel="2"
+            loading="lazy"
+          />
+          
+          <!-- Hover Image -->
+          <img 
+            src="/guys/leon/leon-hoover.png" 
+            alt="Leon Special"
+            class="hover-image"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      
+      <!-- Diagonal Golden Line -->
+      <div class="diagonal-line"></div>
+      
+      <!-- Text Section (RIGHT) -->
+      <div class="guy-text-container">
+        <div class="guy-header">
+          <h2 class="guy-name">Leon</h2>
+          <h3 class="guy-role">anubis</h3>
+        </div>
+        
+        <p class="guy-description">
+          Meet Leon, our mysterious Anubis who brings ancient power and divine 
+          mystique to every performance. With his commanding presence and otherworldly 
+          allure, he delivers shows that are both mesmerizing and unforgettable. 
+          Whether it's an Egyptian-themed event or an evening of mythical passion, 
+          Leon knows how to guide you through an experience beyond the mortal realm.
+        </p>
+        
+        <!-- Tags -->
+        <div class="guy-tags">
+          <span class="guy-tag">6.2"</span>
+          <span class="guy-tag">Guardian of desire</span>
+          <span class="guy-tag">Ancient and divine</span>
+        </div>
+      </div>
+    </div>
+  </section>

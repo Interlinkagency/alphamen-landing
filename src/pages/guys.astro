@@ -8,42 +8,27 @@ import JBSection from '../components/guys/JBSection.astro';
 import FinnSection from '../components/guys/FinnSection.astro'; 
 import RickySection from '../components/guys/RickySection.astro';
 import SammySection from '../components/guys/SammySection.astro'; 
-
+import JTSection from '../components/guys/JTSection.astro';
+import LeonSection from '../components/guys/LeonSection.astro';
+import '../styles/guys/scroll-blur-effect.css';
 ---
 
 <Layout 
   title="AlphaMen - Our Performers" 
   description="Meet the AlphaMen performers - professional artists delivering world-class entertainment experiences."
 >
-  <!-- Navbar -->
   <Navbar />
   
-  <!-- Container para secciones con efecto scroll cinemático -->
   <div class="guys-container">
-    <!-- Taylor Section -->
     <TaylorSection />
-    
-    <!-- Sanchez Section -->
     <SanchezSection />
-    
-    <!-- JB Section -->
     <JBSection />
-
-    <!-- Finn Section -->
     <FinnSection /> 
-
-    <!-- Ricky Section -->
     <RickySection /> 
-
-    <!-- Sammy Section -->
     <SammySection />
+    <JTSection />
   </div>
 </Layout>
-
-<!-- Importar estilos del efecto scroll -->
-<style>
-  @import url('/src/styles/guys/scroll-blur-effect.css');
-</style>
 
 <!-- Script para el efecto scroll cinemático tipo Apple -->
 <script>
@@ -51,7 +36,6 @@ import SammySection from '../components/guys/SammySection.astro';
   let sections: NodeListOf<Element>;
   let windowHeight: number;
 
-  // Función principal para calcular y aplicar el efecto scroll
   function updateScrollEffect(): void {
     const scrollY = window.scrollY;
     windowHeight = window.innerHeight;
@@ -63,7 +47,6 @@ import SammySection from '../components/guys/SammySection.astro';
       const sectionHeight = rect.height;
       const sectionBottom = sectionTop + sectionHeight;
 
-      // Calcular progreso de la sección en el viewport
       let progress = 0;
 
       if (sectionTop <= 0 && sectionBottom >= windowHeight) {
@@ -74,7 +57,6 @@ import SammySection from '../components/guys/SammySection.astro';
         progress = sectionBottom / windowHeight;
       }
 
-      // Aplicar clases según el progreso
       if (progress >= 0.7) {
         htmlSection.classList.add('scrolling-in');
         htmlSection.classList.remove('scrolling-out', 'inactive');
@@ -86,7 +68,6 @@ import SammySection from '../components/guys/SammySection.astro';
         htmlSection.classList.remove('scrolling-in', 'scrolling-out');
       }
 
-      // Aplicar transformaciones progresivas
       if (progress > 0 && progress < 1) {
         const opacity = Math.max(0, Math.min(1, progress));
         const scale = 0.8 + (progress * 0.2);
@@ -102,7 +83,6 @@ import SammySection from '../components/guys/SammySection.astro';
     ticking = false;
   }
 
-  // Usar requestAnimationFrame para optimizar performance
   function onScroll(): void {
     if (!ticking) {
       window.requestAnimationFrame(() => {
@@ -112,29 +92,23 @@ import SammySection from '../components/guys/SammySection.astro';
     }
   }
 
-  // Inicialización
   function initCinematicScroll(): void {
     sections = document.querySelectorAll('.guy-section');
     windowHeight = window.innerHeight;
-
     updateScrollEffect();
-
     window.addEventListener('scroll', onScroll, { passive: true });
-
     window.addEventListener('resize', () => {
       windowHeight = window.innerHeight;
       updateScrollEffect();
     });
   }
 
-  // Inicializar cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       initCinematicScroll();
     }, 100);
   });
 
-  // Cleanup
   window.addEventListener('beforeunload', () => {
     window.removeEventListener('scroll', onScroll);
   });
@@ -142,7 +116,6 @@ import SammySection from '../components/guys/SammySection.astro';
 
 <!-- Script Universal de Carrusel -->
 <script>
-  // Sistema universal de carrusel para todas las secciones
   class CarouselManager {
     private section: string;
     private currentSlide: number;
@@ -161,7 +134,6 @@ import SammySection from '../components/guys/SammySection.astro';
     }
 
     init(): boolean {
-      // Buscar imágenes del carrusel en esta sección
       const nodeList = document.querySelectorAll(`${this.section} .carousel-image`);
       this.images = Array.from(nodeList) as HTMLElement[];
       
@@ -170,19 +142,13 @@ import SammySection from '../components/guys/SammySection.astro';
         return false;
       }
 
-      // Asegurar que la primera imagen esté visible
       if (this.images[0]) {
         this.images[0].style.opacity = '1';
         this.images[0].classList.add('active');
       }
 
-      // Configurar hover
       this.setupHover();
-
-      // Iniciar carrusel
       this.start();
-
-      // Precargar imágenes
       this.preloadImages();
 
       return true;
@@ -207,29 +173,24 @@ import SammySection from '../components/guys/SammySection.astro';
       if (this.isHovering || this.images.length === 0) return;
 
       const currentImage = this.images[this.currentSlide];
-      
-      // Calcular siguiente slide
       const nextSlide = (this.currentSlide + 1) % this.totalSlides;
       const nextImage = this.images[nextSlide];
 
       if (!nextImage) return;
 
-      // Fade out actual
       if (currentImage) {
         currentImage.style.opacity = '0';
         currentImage.classList.remove('active');
       }
 
-      // Fade in siguiente
       nextImage.style.opacity = '1';
       nextImage.classList.add('active');
 
-      // Actualizar índice
       this.currentSlide = nextSlide;
     }
 
     start(): void {
-      this.stop(); // Limpiar cualquier intervalo anterior
+      this.stop();
       this.interval = window.setInterval(() => this.rotate(), 4000);
     }
 
@@ -250,7 +211,6 @@ import SammySection from '../components/guys/SammySection.astro';
         }
       });
 
-      // Precargar hover image
       const hoverImg = document.querySelector(`${this.section} .hover-image`) as HTMLImageElement;
       if (hoverImg) {
         const src = hoverImg.getAttribute('src');
@@ -262,17 +222,16 @@ import SammySection from '../components/guys/SammySection.astro';
     }
   }
 
-  // Inicializar carruseles cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', () => {
-    // Pequeño delay para asegurar que todo esté renderizado
     setTimeout(() => {
-      // Crear instancias para cada sección
       const taylorCarousel = new CarouselManager('#taylor');
       const sanchezCarousel = new CarouselManager('#sanchez');
       const jbCarousel = new CarouselManager('#jb');
       const finnCarousel = new CarouselManager('#finn'); 
       const rickyCarousel = new CarouselManager('#ricky');
       const sammyCarousel = new CarouselManager('#sammy');
+      const jtCarousel = new CarouselManager('#jt');
+      const leonCarousel = new CarouselManager('#leon');
 
       // Inicializar cada uno
       taylorCarousel.init();
@@ -281,8 +240,11 @@ import SammySection from '../components/guys/SammySection.astro';
       finnCarousel.init();
       rickyCarousel.init();
       sammyCarousel.init();
+      jtCarousel.init();
+      leonCarousel.init();
 
-      // Limpiar al salir
+      // ✅ ELIMINADAS las líneas stop() duplicadas
+
       window.addEventListener('beforeunload', () => {
         taylorCarousel.stop();
         sanchezCarousel.stop();
@@ -290,9 +252,10 @@ import SammySection from '../components/guys/SammySection.astro';
         finnCarousel.stop();
         rickyCarousel.stop();
         sammyCarousel.stop(); 
+        jtCarousel.stop();
+        leonCarousel.stop();
       });
 
-      // Pausar cuando la página no está visible
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           taylorCarousel.stop();
@@ -301,6 +264,8 @@ import SammySection from '../components/guys/SammySection.astro';
           finnCarousel.stop(); 
           rickyCarousel.stop();
           sammyCarousel.stop();
+          jtCarousel.stop();
+          leonCarousel.stop(); 
         } else {
           if (!taylorCarousel['isHovering']) taylorCarousel.start();
           if (!sanchezCarousel['isHovering']) sanchezCarousel.start();
@@ -308,6 +273,8 @@ import SammySection from '../components/guys/SammySection.astro';
           if (!finnCarousel['isHovering']) finnCarousel.start();
           if (!rickyCarousel['isHovering']) rickyCarousel.start();
           if (!sammyCarousel['isHovering']) sammyCarousel.start();
+          if (!jtCarousel['isHovering']) jtCarousel.start();
+          if (!leonCarousel['isHovering']) leonCarousel.start(); 
         }
       });
     }, 150);
