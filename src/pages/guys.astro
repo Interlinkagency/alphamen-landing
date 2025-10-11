@@ -9,7 +9,7 @@ import FinnSection from '../components/guys/FinnSection.astro';
 import RickySection from '../components/guys/RickySection.astro';
 import SammySection from '../components/guys/SammySection.astro'; 
 import JTSection from '../components/guys/JTSection.astro';
-import LeonSection from '../components/guys/LeonSection.astro';
+import AndreSection from '../components/guys/AndreSection.astro'; 
 import '../styles/guys/scroll-blur-effect.css';
 ---
 
@@ -27,6 +27,7 @@ import '../styles/guys/scroll-blur-effect.css';
     <RickySection /> 
     <SammySection />
     <JTSection />
+    <AndreSection />
   </div>
 </Layout>
 
@@ -232,6 +233,7 @@ import '../styles/guys/scroll-blur-effect.css';
       const sammyCarousel = new CarouselManager('#sammy');
       const jtCarousel = new CarouselManager('#jt');
       const leonCarousel = new CarouselManager('#leon');
+      const andreCarousel = new CarouselManager('#andre'); 
 
       // Inicializar cada uno
       taylorCarousel.init();
@@ -242,6 +244,7 @@ import '../styles/guys/scroll-blur-effect.css';
       sammyCarousel.init();
       jtCarousel.init();
       leonCarousel.init();
+      andreCarousel.init(); 
 
       // ✅ ELIMINADAS las líneas stop() duplicadas
 
@@ -254,6 +257,7 @@ import '../styles/guys/scroll-blur-effect.css';
         sammyCarousel.stop(); 
         jtCarousel.stop();
         leonCarousel.stop();
+        andreCarousel.stop();
       });
 
       document.addEventListener('visibilitychange', () => {
@@ -266,6 +270,7 @@ import '../styles/guys/scroll-blur-effect.css';
           sammyCarousel.stop();
           jtCarousel.stop();
           leonCarousel.stop(); 
+          andreCarousel.stop();
         } else {
           if (!taylorCarousel['isHovering']) taylorCarousel.start();
           if (!sanchezCarousel['isHovering']) sanchezCarousel.start();
@@ -275,6 +280,7 @@ import '../styles/guys/scroll-blur-effect.css';
           if (!sammyCarousel['isHovering']) sammyCarousel.start();
           if (!jtCarousel['isHovering']) jtCarousel.start();
           if (!leonCarousel['isHovering']) leonCarousel.start(); 
+          if (!andreCarousel['isHovering']) andreCarousel.start();
         }
       });
     }, 150);
